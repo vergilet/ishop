@@ -1,55 +1,47 @@
 require 'rails_helper'
 
 
-describe DiscountFoodAfterSix do
-  let(:food_category) { FactoryBot.create(:category, name: 'Food') }
-  let(:not_food_category) { FactoryBot.create(:category, name: 'Not Food') }
-
-  let(:food_product) { FactoryBot.create(:product, name: 'Food1', price: 220.43, category: food_category) }
-  let(:food_product_2) { FactoryBot.create(:product, name: 'Food2', price: 56.30, category: food_category) }
-  let(:not_food_product) { FactoryBot.create(:product, name: 'Car1', price: 1000.00, category: not_food_category) }
-
+describe DiscountMouseAndKeyboard do
   let!(:order) { FactoryBot.create(:order) }
-  let!(:order_item_1) { FactoryBot.create(:order_item, product: food_product, order: order, unit_price: 220.43, quantity: 1) }
-  let!(:order_item_2) { FactoryBot.create(:order_item, product: not_food_product, order: order, unit_price: 1000.0, quantity: 1) }
-  let!(:order_item_3) { FactoryBot.create(:order_item, product: food_product_2, order: order, unit_price: 56.30, quantity: 3) }
+
+  let(:food_category) { FactoryBot.create(:category, name: 'Food') }
+  let(:food_product) { FactoryBot.create(:product, name: 'Food1', price: 220.43, category: food_category) }
+  let!(:order_item_1) { FactoryBot.create(:order_item, product: food_product, order: order, unit_price: 220.43, quantity: 20) }
+
+
+
+  let(:mouse_category) { FactoryBot.create(:category, name: 'Mouse') }
+  let(:keyboard_category) { FactoryBot.create(:category, name: 'Keyboard') }
+
+  let(:mouse_product) { FactoryBot.create(:product, name: 'Mouse 1', price: 1500.44, category: mouse_category) }
+  let(:mouse_product_2) { FactoryBot.create(:product, name: 'Mouse 2', price: 1300.44, category: mouse_category) }
+
+  let(:keyboard_product) { FactoryBot.create(:product, name: 'Keyboard 1', price: 800, category: keyboard_category) }
+
+
+
+
+  let!(:mouse_order_1) { FactoryBot.create(:order_item, product: mouse_product, order: order, unit_price: 1500.44, quantity: 1) }
+  let!(:mouse_order_2) { FactoryBot.create(:order_item, product: mouse_product_2, order: order, unit_price: 1300.44, quantity: 8) }
+  let!(:keyboard_order_1) { FactoryBot.create(:order_item, product: keyboard_product, order: order, unit_price: 800, quantity: 12) }
 
   let(:hash) do
     {
-      items: order.order_items,
-      discounts: []
+        items: order.order_items,
+        discounts: []
     }
   end
 
   subject(:context) { described_class.call(hash) }
 
   describe ".call" do
-    context 'after six' do
-      before do
-        Timecop.freeze(Time.local(2008, 9, 1, 18, 0, 0))
-      end
-
-      it "returns same items" do
-        expect(context[:items]).to eq order.order_items
-      end
-
-      it "adds discounts" do
-        expect(context[:discounts]).to eq [{amount: 369.86, name: "Food after 18:00"}]
-      end
+    it "returns same items" do
+      expect(context[:items]).to eq order.order_items
     end
 
-    context 'before six' do
-      before do
-        Timecop.freeze(Time.local(2008, 9, 1, 17, 0, 0))
-      end
-
-      it "returns same items" do
-        expect(context[:items]).to eq order.order_items
-      end
-
-      it "adds discounts" do
-        expect(context[:discounts]).to eq []
-      end
+    it "adds discounts" do
+      puts order.subtotal
+      expect(context[:discounts]).to eq [{amount: 573.12, name: "Mouse & Keyboard"}]
     end
   end
 end
