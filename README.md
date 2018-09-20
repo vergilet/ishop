@@ -1,24 +1,20 @@
-# README
+## ishop
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Shopping card ROR application.
 
-Things you may want to cover:
+Allows to make an order with applied discounts.
 
-* Ruby version
+Models:
 
-* System dependencies
+- Product
+- Category
+- Order
+- Order Item
 
-* Configuration
+Available discounts:
+- Product from category 'food' after 6PM - 5%
+- Product from category 'mouse' and 'keyboard' in pair have 3%
+- 10 products with 'white' color 1%
 
-* Database creation
 
-* Database initialization
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
